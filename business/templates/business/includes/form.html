@@ -1,0 +1,32 @@
+{% load widget_tweaks %}
+
+<form class="form" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+{% for hidden in form.hidden_fields %}
+  {{ hidden }}
+{% endfor %}
+
+{% if form.errors %}
+  <p class="errorlist">There were some errors. Please correct them below.</p>
+{% endif %}
+
+{% for fld in form.visible_fields %}
+  <div class="edit__item form-group">
+    {% if 'date' in fld.label %}
+    {{ fld.label_tag }}
+    <div class="input-group date">
+      {{ fld|add_class:"input form-control" }}
+    </div>
+    {% else %}
+    {{ fld.label_tag }}
+    {{ fld|add_class:"input form-control" }}
+    {% endif %}
+    {{ fld.errors }}
+  </div>
+{% endfor %}
+
+  <input class="btn" type="submit">
+  <a style="margin-left: 1.5rem;" href="./">Cancel</a>
+  
+</form>
