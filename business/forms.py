@@ -11,7 +11,7 @@ class ClientForm(forms.ModelForm):
             'name': forms.TextInput(),
             'email': forms.TextInput(),
         }
-        
+
 
 class EntryForm(forms.ModelForm):
     class Meta:
@@ -45,5 +45,3 @@ class RateForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(),
         }
-
-
