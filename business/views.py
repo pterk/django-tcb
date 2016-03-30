@@ -1,9 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from . import forms, models
 
 
+@login_required
 def overview(request):
     if request.method == 'POST':
         form = forms.EntryForm(request.POST, request.FILES)
@@ -27,6 +29,7 @@ def overview(request):
         })
 
 
+@login_required
 def project_overview(request, project_id):
     project = get_object_or_404(models.Project, pk=project_id)
     entries = models.Entry.objects.current_quarter().filter(project=project)
