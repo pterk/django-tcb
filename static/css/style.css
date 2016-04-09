@@ -43,6 +43,9 @@ body {
 .nr {
     text-align: right;
 }
+.dte {
+    width: 9em;
+}
 .total {
     border-top: 2px solid black;
 }

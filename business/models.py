@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from datetime import date, timedelta
 from decimal import Decimal
 
@@ -32,6 +33,23 @@ def get_quarter(date):
     return (date.month-1)//3 + 1
 
 
+def get_quarters(since_year=2016):
+    current_year = today().year
+    current_quarter = get_quarter(today())
+    quarter_count = ((current_year - since_year) * 4) + current_quarter
+    quarters = OrderedDict()
+    for q in range(1, quarter_count + 1):
+        years, quarter = divmod(q, 4)
+        year = since_year + years
+        if quarter == 0:
+            quarter = 4
+            year = year - 1
+        month = ((quarter-1) * 3) + 1
+        quarters["{}-{}".format(year, quarter)] = timezone.datetime(
+             year, month, 1).date()
+    return quarters
+
+
 def get_quarter_start(dte):
     start_month = ((get_quarter(dte) - 1) * 3) + 1
     return date(dte.year, start_month, 1)
@@ -58,10 +76,10 @@ class Client(BaseModel):
 
 
 class EntryQuerySet(models.QuerySet):
-    def current_quarter(self):
+    def get_quarter(self, dte):
         return self.select_related('project', 'project__rate', 'project__client').filter(
-            date__gte=get_quarter_start(today()),
-            date__lt=get_next_quarter_start(today()))
+            date__gte=get_quarter_start(dte),
+            date__lt=get_next_quarter_start(dte))
 
     def totals(self):
         rows = self.select_related('project', 'project__rate', 'project__client').values(

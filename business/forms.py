@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 
 from . import models
 
@@ -25,6 +26,15 @@ class EntryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['project'].queryset = models.Project.active.select_related(
             'client').all()
+
+
+class FilterForm(forms.Form):
+    quarter = forms.ChoiceField(
+        required=False,
+        choices=reversed([(q, q) for q in models.get_quarters()]))
+    project = forms.ModelChoiceField(
+        required=False,
+        queryset=models.Project.objects.all())
 
 
 class ProjectForm(forms.ModelForm):

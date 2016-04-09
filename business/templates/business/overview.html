@@ -1,31 +1,35 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
-<h2>Quick Entry</h2>
-
-{% include "business/includes/form.html" %}
-<br>
 <div class="row">
   <div class="col-md-12">
-    <p class="">
-      <button class="btn btn-default" id="qttoggle">Show totals</button>
-    </p>
-    <div id="quarter-totals" style="display:none">
-      <h2>Current Quarter</h2>
-      {% include 'business/includes/summary-table.html' %}
-    </div>
+    <form class="form-inline pull-right">
+      <br>
+      {% for fld in form %}{{ fld|add_class:"form-control" }}{% endfor %}
+      <input type="submit" name="" value="filter">
+    </form>
+    <h1>Overview {{ quarter }}</h1>
+    {% if project %}
+    <h2>{{ project}}</h2>
+    {% endif %}
   </div>
 </div>
 
+<div class="row">
+  <div class="col-md-12">
+    <h2>Summary</h2>
+    {% include 'business/includes/summary-table.html' %}
+    <h2>Entries</h2>
+    {% include 'business/includes/entries-table.html' %}
+  </div>
+</div>
 {% endblock %}
 
 {% block js %}
 <script>
 $(document).ready(function(){
   $('#id_project').focus();
-  $('#qttoggle').click(function(ev){
-    $('#quarter-totals').toggle();
-  });
 });
 </script>
 {% endblock %}

@@ -10,9 +10,9 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in current_quarter_entries %}
+        {% for row in entries %}
         <tr>
-          <td>{{ row.date }}</td>
+          <td class="dte">{{ row.date }}</td>
           <td>{{ row.note }}</td>
           <td class="nr">{{ row.project.rate.rate }}</td>
           <td>{{ row.project.rate.unit }}</td>

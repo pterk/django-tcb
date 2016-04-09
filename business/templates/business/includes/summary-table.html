@@ -10,10 +10,10 @@
         </tr>
       </thead>
       <tbody>
-        {% for row in current_quarter_totals %}
+        {% for row in totals %}
         <tr>
           <td>{{ row.client }}</td>
-          <td><a href="{% url 'business-project-overview' row.project_id %}">{{ row.project }}</a></td>
+          <td><a href="{% url 'business-overview' %}?project={{ row.project_id }}">{{ row.project }}</a></td>
           <td class="nr">{{ row.rate }}</td>
           <td>{{ row.unit }}</td>
           <td class="nr">{{ row.hours }}</td>

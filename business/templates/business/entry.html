@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Quick Entry</h2>
+
+{% include "business/includes/form.html" %}
+
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function(){
+  $('#id_project').focus();
+});
+</script>
+{% endblock %}

@@ -5,12 +5,12 @@ from . import views
 urlpatterns = [
     url(
         regex=r'^$',
-        view=views.overview,
-        name='business-overview'
+        view=views.entry,
+        name='business-entry'
     ),
     url(
-        regex=r'^project/(?P<project_id>\d+)/$',
-        view=views.project_overview,
-        name='business-project-overview'
+        regex=r'^overview/$',
+        view=views.overview,
+        name='business-overview',
     ),
 ]
