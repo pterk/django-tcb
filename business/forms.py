@@ -1,7 +1,14 @@
 from django import forms
-from django.utils import timezone
 
 from . import models
+
+
+def get_months_choices():
+    return [(None, '----')] + list(reversed([(q, q.date()) for q in models.get_months()]))
+
+
+def get_quarter_choices():
+    return [(None, '----')] + list(reversed([(q, q) for q in models.get_quarters()]))
 
 
 class ClientForm(forms.ModelForm):
@@ -29,9 +36,12 @@ class EntryForm(forms.ModelForm):
 
 
 class FilterForm(forms.Form):
+    month = forms.ChoiceField(
+        required=False,
+        choices=get_months_choices)
     quarter = forms.ChoiceField(
         required=False,
-        choices=reversed([(q, q) for q in models.get_quarters()]))
+        choices=get_quarter_choices)
     project = forms.ModelChoiceField(
         required=False,
         queryset=models.Project.objects.all())

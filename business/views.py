@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.utils import timezone
 
 from . import forms
@@ -12,7 +12,7 @@ def entry(request):
     if request.method == 'POST':
         form = forms.EntryForm(request.POST, request.FILES)
         if form.is_valid():
-            entry = form.save()
+            form.save()
             return HttpResponseRedirect('/')
     else:
         form = forms.EntryForm()
@@ -26,13 +26,19 @@ def entry(request):
 @login_required
 def overview(request):
     form = forms.FilterForm(request.GET)
-    _ = form.is_valid()
+    form.is_valid()
     quarters = models.get_quarters()
     quarter = form.cleaned_data['quarter']
+    month = form.cleaned_data['month']
+    month = [m for m in models.get_months() if str(m) == month]
     if quarter:
         entries = models.Entry.objects.get_quarter(quarters[quarter])
     else:
-        entries = models.Entry.objects.get_quarter(timezone.now())
+        if month:
+            month = month[0]
+            entries = models.Entry.objects.get_month(month)
+        else:
+            entries = models.Entry.objects.get_quarter(timezone.now())
     project = form.cleaned_data.get('project', None)
     if project:
         entries = entries.filter(project=project)

@@ -1,9 +1,12 @@
 from collections import OrderedDict
-from datetime import date, timedelta
+from datetime import date
 from decimal import Decimal
 
 from django.db import models
 from django.utils import timezone
+
+from dateutil import rrule
+from dateutil.relativedelta import relativedelta
 
 from core.models import BaseModel
 
@@ -22,7 +25,7 @@ UNITS = {
     UNIT_TYPE_FIXED: UNIT_TYPE_FIXED_NAME,
 }
 
-UNIT_TYPES = [(k,v) for k,v in UNITS.items()]
+UNIT_TYPES = [(k, v) for k, v in UNITS.items()]
 
 
 def today():
@@ -31,6 +34,14 @@ def today():
 
 def get_quarter(date):
     return (date.month-1)//3 + 1
+
+
+def get_months(since_year=2016):
+    for dt in rrule.rrule(
+            rrule.MONTHLY,
+            dtstart=timezone.datetime(2016, 1, 1, tzinfo=timezone.utc),
+            until=timezone.now()):
+        yield dt
 
 
 def get_quarters(since_year=2016):
@@ -66,6 +77,12 @@ def get_next_quarter_start(dte):
         )
 
 
+def get_next_month_start(dte):
+    return (
+        dte+relativedelta(months=1)
+    ).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+
 class Client(BaseModel):
     name = models.TextField(unique=True)
     email = models.TextField(blank=True)
@@ -76,6 +93,12 @@ class Client(BaseModel):
 
 
 class EntryQuerySet(models.QuerySet):
+    def get_month(self, dte):
+        start = dte.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        return self.select_related('project', 'project__rate', 'project__client').filter(
+            date__gte=start,
+            date__lt=get_next_month_start(dte))
+
     def get_quarter(self, dte):
         return self.select_related('project', 'project__rate', 'project__client').filter(
             date__gte=get_quarter_start(dte),
@@ -86,7 +109,7 @@ class EntryQuerySet(models.QuerySet):
             'project__name', 'project__rate__rate', 'project__rate__unit_type',
             'project__client__name', 'project_id', 'project__vat', 'billable',
         ).annotate(hours=models.Sum('number')).order_by('project_id')
-        #print (len(rows))
+        # print (len(rows))
         for row in rows:
             if row['project__rate__unit_type'] == UNIT_TYPE_FIXED:
                 row['total'] = row['project__rate__rate']
@@ -131,7 +154,8 @@ class Entry(BaseModel):
             return self.project.rate.rate
         if not self.billable:
             return 0
-        return Decimal((self.project.rate.rate / self.project.rate.unit_type) * self.number).quantize(Decimal('1.00'))
+        return Decimal((self.project.rate.rate / self.project.rate.unit_type) *
+                       self.number).quantize(Decimal('1.00'))
 
     def __str__(self):
         return "{}: {} => {} {} : {}".format(
@@ -155,7 +179,7 @@ class Project(BaseModel):
     start = models.DateField(default=today)
     end = models.DateField()
     rate = models.ForeignKey('Rate')
-    vat =  models.DecimalField(max_digits=4, decimal_places=2, default=21)
+    vat = models.DecimalField(max_digits=4, decimal_places=2, default=21)
 
     objects = ProjectManager()
     active = ActiveProjectManager()
