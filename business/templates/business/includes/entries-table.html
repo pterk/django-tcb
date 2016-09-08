@@ -12,7 +12,8 @@
       <tbody>
         {% for row in entries %}
         <tr>
-          <td class="dte">{{ row.date }}</td>
+          <td class="dte"><a target="_blank" href="{% url 'admin:business_entry_change' row.id %}">
+              {{ row.date|date:"D, Y-m-d" }}</a></td>
           <td>{{ row.note }}</td>
           <td class="nr">{{ row.project.rate.rate }}</td>
           <td>{{ row.project.rate.unit }}</td>

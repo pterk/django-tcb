@@ -13,7 +13,7 @@ def entry(request):
         form = forms.EntryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/log/')
     else:
         form = forms.EntryForm()
     return render(
@@ -21,6 +21,17 @@ def entry(request):
         {
             'form': form,
         })
+
+
+@login_required
+def entry_log(request):
+    entries = models.Entry.objects.all().order_by('-created')[:50]
+    return render(
+        request, 'business/entry_log.html',
+        {
+            'entries': entries,
+        })
+
 
 
 @login_required

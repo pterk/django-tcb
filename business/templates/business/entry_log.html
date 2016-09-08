@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Entries</h2>
+    {% include 'business/includes/entries-table.html' %}
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function(){
+  $('#id_project').focus();
+});
+</script>
+{% endblock %}
