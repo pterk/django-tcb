@@ -2,6 +2,7 @@
       <thead>
         <tr>
           <th>Date</th>
+          <th>Project</th>
           <th>Note</th>
           <th class="nr">Rate</th>
           <th></th>
@@ -14,6 +15,7 @@
         <tr>
           <td class="dte"><a target="_blank" href="{% url 'admin:business_entry_change' row.id %}">
               {{ row.date|date:"D, Y-m-d" }}</a></td>
+          <td>{{ row.project.client }}</td>
           <td>{{ row.note }}</td>
           <td class="nr">{{ row.project.rate.rate }}</td>
           <td>{{ row.project.rate.unit }}</td>
@@ -22,7 +24,7 @@
         </tr>
         {% endfor %}
         <tr class="total">
-          <td colspan="4"></td>
+          <td colspan="5"></td>
           <th class="nr">Subotal</th>
           <th class="nr">{{ total }}</th>
         </tr>
