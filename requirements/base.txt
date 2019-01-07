@@ -1,8 +1,8 @@
-Django==1.9.4
-django-environ==0.4.0
-django-extensions==1.6.1
-django-widget-tweaks==1.4.1
-djangorestframework==3.3.2
-gunicorn==19.4.5
-psycopg2==2.6.1
+Django==2.1.5
+django-environ==0.4.5
+django-extensions==2.1.4
+django-widget-tweaks==1.4.3
+djangorestframework==3.9.0
+gunicorn==19.0.0
+psycopg2==2.7.1
 dateutils==0.6.6

@@ -132,7 +132,7 @@ class EntryQuerySet(models.QuerySet):
 
 class Entry(BaseModel):
     date = models.DateField(default=today)
-    project = models.ForeignKey('Project')
+    project = models.ForeignKey('Project', on_delete=models.CASCADE)
     unit_type = models.IntegerField(choices=UNIT_TYPES, default=1)
     number = models.DecimalField(max_digits=6, decimal_places=2)
     note = models.TextField()
@@ -174,11 +174,11 @@ class ActiveProjectManager(ProjectManager):
 
 
 class Project(BaseModel):
-    client = models.ForeignKey('Client', related_name='projects')
+    client = models.ForeignKey('Client', related_name='projects', on_delete=models.CASCADE)
     name = models.TextField()
     start = models.DateField(default=today)
     end = models.DateField()
-    rate = models.ForeignKey('Rate')
+    rate = models.ForeignKey('Rate', on_delete=models.CASCADE)
     vat = models.DecimalField(max_digits=4, decimal_places=2, default=21)
 
     objects = ProjectManager()

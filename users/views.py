@@ -33,7 +33,7 @@ class LoginView(TemplateView, View):
 
 class LogoutView(View):
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return redirect('home')
         logout(request)
         #messages.success(request, "You are now logged out!")
