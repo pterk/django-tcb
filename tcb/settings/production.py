@@ -22,7 +22,7 @@ SECURITY_MIDDLEWARE = ()
 
 #MIDDLEWARE_CLASSES = ()
 # Make sure security middleware is listed first
-MIDDLEWARE_CLASSES = SECURITY_MIDDLEWARE + MIDDLEWARE_CLASSES
+MIDDLEWARE = SECURITY_MIDDLEWARE + MIDDLEWARE
 
 # SECURITY CONFIGURATION
 # ------------------------------------------------------------------------------
