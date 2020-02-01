@@ -154,7 +154,7 @@ class Entry(BaseModel):
             return self.project.rate.rate
         if not self.billable:
             return 0
-        return Decimal((self.project.rate.rate / self.project.rate.unit_type) *
+        return Decimal((self.project.rate.rate / self.project.rate.unit_type or 1) *
                        self.number).quantize(Decimal('1.00'))
 
     def __str__(self):

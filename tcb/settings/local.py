@@ -56,3 +56,8 @@ DEBUG_TOOLBAR_CONFIG = {
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # Your local stuff: Below this line define 3rd party library settings
 
+DATABASES = {
+    # Raises ImproperlyConfigured exception if DATABASE_URL not in os.environ
+    'default': env.db("DATABASE_URL", default="postgresql:///tcb"),
+}
+DATABASES['default']['ATOMIC_REQUESTS'] = True
