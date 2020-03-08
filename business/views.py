@@ -49,7 +49,7 @@ def overview(request):
             month = month[0]
             entries = models.Entry.objects.get_month(month)
         else:
-            entries = models.Entry.objects.get_quarter(timezone.now())
+            entries = models.Entry.objects.get_month(timezone.now())
     project = form.cleaned_data.get('project', None)
     if project:
         entries = entries.filter(project=project)
@@ -60,7 +60,7 @@ def overview(request):
     return render(
         request, 'business/overview.html',
         {
-            'entries': entries,
+            'entries': entries.order_by('-date'),
             'totals': totals,
             'form': form,
             'project': project,
